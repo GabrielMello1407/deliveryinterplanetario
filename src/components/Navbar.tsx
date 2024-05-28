@@ -5,12 +5,10 @@ import './Navbar.css'; // Importa o arquivo CSS
 const Menu: React.FC = () => {
   return (
     <nav className="navbar">
+      <NavLink to="/" className="navbar-logo">
+        <h2>DeliveryPlanet</h2>
+      </NavLink>
       <ul className="navbar-menu">
-        <li className="navbar-item">
-          <NavLink to="/" className="navbar-logo">
-            <h2>DeliveryPlanet</h2>
-          </NavLink>
-        </li>
         <li className="navbar-item">
           <NavLink
             to="/cadastro"
@@ -18,15 +16,6 @@ const Menu: React.FC = () => {
             activeClassName="active"
           >
             Cadastrar
-          </NavLink>
-        </li>
-        <li className="navbar-item">
-          <NavLink
-            to="/editarCadastro"
-            className="navbar-link"
-            activeClassName="active"
-          >
-            Editar cadastro
           </NavLink>
         </li>
       </ul>

@@ -1,0 +1,38 @@
+/* src/routes/Home.css */
+
+.home-container {
+  padding: 20px;
+}
+
+.endereco-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.endereco-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Estilos para cada item do endereço */
+.endereco-item p {
+  margin: 5px 0;
+}
+.button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  align-self: center;
+  margin-right: 5px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}

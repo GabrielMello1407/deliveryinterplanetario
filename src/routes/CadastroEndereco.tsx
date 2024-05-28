@@ -1,194 +1,171 @@
-import React, { ChangeEvent } from 'react';
-import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEndereco } from '../context/EnderecoContext';
-import '../index.css'; // Importa o arquivo CSS
+import { useNavigate } from 'react-router-dom';
 
 interface FormValues {
   nome: string;
   sobrenome: string;
-  rua: string;
-  numero: string;
-  complemento: string;
-  cep: string;
+  rua?: string;
+  numero?: string;
+  complemento?: string;
+  cep?: string;
   planeta: string;
   lote?: string;
+  pais?: string; // Adicionando o campo "País"
 }
 
 const CadastroEndereco: React.FC = () => {
   const { endereco, setEndereco } = useEndereco();
+  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setEndereco({ ...endereco, [name]: value });
+  const initialValues: FormValues = {
+    nome: endereco.nome || '',
+    sobrenome: endereco.sobrenome || '',
+    rua: endereco.rua || '',
+    numero: endereco.numero || '',
+    complemento: endereco.complemento || '',
+    cep: endereco.cep || '',
+    planeta: endereco.planeta || 'Terra',
+    lote: endereco.lote || '',
+    pais: endereco.pais || '', // Inicializando o campo "País"
   };
 
-  const formik = useFormik<FormValues>({
-    initialValues: endereco,
-    onSubmit: (values) => {
-      // Lógica para enviar os dados do endereço para a API ou realizar outras ações
-      console.log('Endereço cadastrado:', values);
-      // Limpar o formulário após o envio bem-sucedido
-      setEndereco({
-        nome: '',
-        sobrenome: '',
-        rua: '',
-        numero: '',
-        complemento: '',
-        cep: '',
-        planeta: 'Terra',
-        lote: '',
-      });
-    },
-    validate: (values) => {
-      const errors: Partial<FormValues> = {};
-      if (!values.nome) {
-        errors.nome = 'Campo obrigatório';
-      }
-      if (!values.sobrenome) {
-        errors.sobrenome = 'Campo obrigatório';
-      }
-      if (values.planeta === 'Terra') {
-        if (!values.rua) {
-          errors.rua = 'Campo obrigatório';
-        }
-        if (!values.numero) {
-          errors.numero = 'Campo obrigatório';
-        }
-        if (!values.cep) {
-          errors.cep = 'Campo obrigatório';
-        }
-      } else if (values.planeta === 'Marte') {
-        if (!values.lote) {
-          errors.lote = 'Campo obrigatório';
-        } else if (!/^\d{1,4}$/.test(values.lote)) {
-          errors.lote = 'Lote deve conter no máximo 4 números';
-        }
-      }
-      return errors;
-    },
-  });
+  if (submitted) {
+    navigate('/');
+  }
 
   return (
     <div className="container">
       <h2 className="title">Cadastro de Endereço</h2>
-      <form onSubmit={formik.handleSubmit} className="form">
-        <label className="label">
-          Nome:
-          <input
-            type="text"
-            name="nome"
-            value={endereco.nome}
-            onChange={handleChange}
-            className="input"
-          />
-          {formik.errors.nome && formik.touched.nome && (
-            <p className="error">{formik.errors.nome}</p>
-          )}
-        </label>
-        <label className="label">
-          Sobrenome:
-          <input
-            type="text"
-            name="sobrenome"
-            value={endereco.sobrenome}
-            onChange={handleChange}
-            className="input"
-          />
-          {formik.errors.sobrenome && formik.touched.sobrenome && (
-            <p className="error">{formik.errors.sobrenome}</p>
-          )}
-        </label>
-        <label className="label">
-          Planeta:
-          <select
-            name="planeta"
-            value={endereco.planeta}
-            onChange={handleChange}
-            className="select"
-          >
-            <option value="Terra">Terra</option>
-            <option value="Marte">Marte</option>
-          </select>
-        </label>
-        {endereco.planeta === 'Terra' ? (
-          <>
+      <Formik
+        initialValues={initialValues}
+        validate={(values) => {
+          const errors: Partial<FormValues> = {};
+          if (!values.nome) {
+            errors.nome = 'Campo obrigatório';
+          }
+          if (!values.sobrenome) {
+            errors.sobrenome = 'Campo obrigatório';
+          }
+          if (!values.planeta) {
+            errors.planeta = 'Selecione um planeta';
+          }
+          if (values.planeta === 'Marte' && !values.lote) {
+            errors.lote = 'Campo obrigatório para Marte';
+          }
+          if (values.planeta === 'Terra' && !values.pais) {
+            // Verificando se o campo "País" está preenchido apenas para Terra
+            errors.pais = 'Campo obrigatório para a Terra';
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          console.log('Endereço cadastrado:', values);
+
+          const storedEnderecos = JSON.parse(
+            localStorage.getItem('enderecos') || '[]',
+          );
+          storedEnderecos.push(values);
+          localStorage.setItem('enderecos', JSON.stringify(storedEnderecos));
+
+          setEndereco({
+            nome: '',
+            sobrenome: '',
+            rua: '',
+            numero: '',
+            complemento: '',
+            cep: '',
+            planeta: 'Terra',
+            lote: '',
+            pais: '', // Limpando o campo "País" após o envio
+          });
+
+          setSubmitted(true);
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting, values }) => (
+          <Form className="form">
             <label className="label">
-              Cep:
-              <input
-                type="number"
-                name="cep"
-                value={endereco.cep}
-                onChange={handleChange}
-                className="input"
-              />
-              {formik.errors.cep && formik.touched.cep && (
-                <p className="error">{formik.errors.cep}</p>
-              )}
+              Nome:
+              <Field type="text" name="nome" className="input" />
+              <ErrorMessage name="nome" component="p" className="error" />
             </label>
             <label className="label">
-              Rua:
-              <input
-                type="text"
-                name="rua"
-                value={endereco.rua}
-                onChange={handleChange}
-                className="input"
-              />
-              {formik.errors.rua && formik.touched.rua && (
-                <p className="error">{formik.errors.rua}</p>
-              )}
+              Sobrenome:
+              <Field type="text" name="sobrenome" className="input" />
+              <ErrorMessage name="sobrenome" component="p" className="error" />
             </label>
-            <label className="label">
-              Número:
-              <input
-                type="number"
-                name="numero"
-                value={endereco.numero}
-                onChange={handleChange}
-                className="input"
-              />
-              {formik.errors.numero && formik.touched.numero && (
-                <p className="error">{formik.errors.numero}</p>
-              )}
-            </label>
-            <label className="label">
-              Complemento:
-              <input
-                type="text"
-                name="complemento"
-                value={endereco.complemento}
-                onChange={handleChange}
-                className="input"
-              />
-            </label>
-          </>
-        ) : (
-          <label className="label">
-            Lote:
-            <input
-              type="number"
-              name="lote"
-              value={endereco.lote}
-              onChange={handleChange}
-              className="input"
-              maxLength={4}
-              onInput={(e) => {
-                if (e.currentTarget.value.length > 4) {
-                  e.currentTarget.value = e.currentTarget.value.slice(0, 4);
-                }
-              }}
-            />
-            {formik.errors.lote && formik.touched.lote && (
-              <p className="error">{formik.errors.lote}</p>
+            <div className="label">Planeta:</div>
+            <div
+              role="group"
+              aria-labelledby="planeta-group"
+              className="radio-group"
+            >
+              <label>
+                <Field type="radio" name="planeta" value="Terra" />
+                Terra
+              </label>
+              <label>
+                <Field type="radio" name="planeta" value="Marte" />
+                Marte
+              </label>
+            </div>
+            <ErrorMessage name="planeta" component="p" className="error" />
+            {values.planeta === 'Marte' ? (
+              <>
+                <label className="label">
+                  Lote:
+                  <Field
+                    type="number"
+                    name="lote"
+                    className="input"
+                    maxLength={4}
+                    onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 4);
+                    }}
+                  />
+                  <ErrorMessage name="lote" component="p" className="error" />
+                </label>
+              </>
+            ) : (
+              <>
+                <label className="label">
+                  Cep:
+                  <Field type="number" name="cep" className="input" />
+                  <ErrorMessage name="cep" component="p" className="error" />
+                </label>
+                <label className="label">
+                  Rua:
+                  <Field type="text" name="rua" className="input" />
+                  <ErrorMessage name="rua" component="p" className="error" />
+                </label>
+                <label className="label">
+                  Número:
+                  <Field type="number" name="numero" className="input" />
+                  <ErrorMessage name="numero" component="p" className="error" />
+                </label>
+                <label className="label">
+                  Complemento:
+                  <Field type="text" name="complemento" className="input" />
+                </label>
+                {values.planeta === 'Terra' && ( // Renderizando o campo "País" apenas para Terra
+                  <label className="label">
+                    País:
+                    <Field type="text" name="pais" className="input" />
+                    <ErrorMessage name="pais" component="p" className="error" />
+                  </label>
+                )}
+              </>
             )}
-          </label>
+            <button type="submit" className="button" disabled={isSubmitting}>
+              Cadastrar Endereço
+            </button>
+          </Form>
         )}
-        <button type="submit" className="button">
-          Cadastrar Endereço
-        </button>
-      </form>
+      </Formik>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 // css
 import './index.css';
@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cadastro" element={<CadastroEndereco />} />
-          <Route path="/editarCadastro" element={<EdicaoEndereco />} />
+          <Route path="/editarCadastro/:id" element={<EdicaoEndereco />} />
         </Routes>
       </Router>
     </EnderecoProvider>
