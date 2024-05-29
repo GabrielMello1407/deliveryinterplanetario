@@ -1,22 +1,21 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Home.css'; // Importando o arquivo de estilo CSS
+import { useNavigate } from 'react-router-dom';
+import './Home.css';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-
-  // Recuperando os endereços cadastrados do localStorage
   const storedEnderecos = JSON.parse(localStorage.getItem('enderecos') || '[]');
 
   const handleDelete = (index: number) => {
-    const updatedEnderecos = [...storedEnderecos];
-    updatedEnderecos.splice(index, 1); // Remove o endereço da lista
+    const updatedEnderecos = storedEnderecos.filter(
+      (_: any, i: number) => i !== index,
+    );
     localStorage.setItem('enderecos', JSON.stringify(updatedEnderecos));
-    window.location.reload(); // Recarrega a página para refletir as alterações
+    window.location.reload();
   };
 
   const handleEdit = (index: number) => {
-    navigate(`/edicao-endereco/${index}`); // Redireciona para a página de edição com o índice do endereço
+    navigate(`/editarCadastro/${index}`);
   };
 
   return (
@@ -30,16 +29,12 @@ const Home: React.FC = () => {
             <p>Rua: {endereco.rua}</p>
             <p>Número: {endereco.numero}</p>
             <p>Complemento: {endereco.complemento}</p>
-            <p>Cep: {endereco.cep}</p>
+            <p>CEP: {endereco.cep}</p>
             <p>Planeta: {endereco.planeta}</p>
-            <p>País: {endereco.pais}</p>
             {endereco.planeta === 'Marte' && <p>Lote: {endereco.lote}</p>}
-            <div className="endereco-buttons">
-              <button onClick={() => handleDelete(index)}>Excluir</button>
-              <button>
-                <Link to={`/editarCadastro/${index}`}>Editar</Link>
-              </button>
-            </div>
+            {endereco.planeta === 'Terra' && <p>País: {endereco.pais}</p>}
+            <button onClick={() => handleEdit(index)}>Editar</button>
+            <button onClick={() => handleDelete(index)}>Deletar</button>
           </div>
         ))}
       </div>

@@ -12,7 +12,7 @@ interface FormValues {
   cep?: string;
   planeta: string;
   lote?: string;
-  pais?: string; // Adicionando o campo "País"
+  pais?: string;
 }
 
 const CadastroEndereco: React.FC = () => {
@@ -26,10 +26,10 @@ const CadastroEndereco: React.FC = () => {
     rua: endereco.rua || '',
     numero: endereco.numero || '',
     complemento: endereco.complemento || '',
-    cep: endereco.cep || '',
+    cep: '',
     planeta: endereco.planeta || 'Terra',
     lote: endereco.lote || '',
-    pais: endereco.pais || '', // Inicializando o campo "País"
+    pais: endereco.pais || '',
   };
 
   if (submitted) {
@@ -56,8 +56,16 @@ const CadastroEndereco: React.FC = () => {
             errors.lote = 'Campo obrigatório para Marte';
           }
           if (values.planeta === 'Terra' && !values.pais) {
-            // Verificando se o campo "País" está preenchido apenas para Terra
             errors.pais = 'Campo obrigatório para a Terra';
+          }
+          if (values.planeta === 'Terra' && !values.cep) {
+            errors.cep = 'Campo obrigatório';
+          } else if (
+            values.planeta === 'Terra' &&
+            values.cep &&
+            !/^\d{5}-\d{3}$/.test(values.cep)
+          ) {
+            errors.cep = 'CEP inválido';
           }
           return errors;
         }}
@@ -79,7 +87,7 @@ const CadastroEndereco: React.FC = () => {
             cep: '',
             planeta: 'Terra',
             lote: '',
-            pais: '', // Limpando o campo "País" após o envio
+            pais: '',
           });
 
           setSubmitted(true);
@@ -134,7 +142,12 @@ const CadastroEndereco: React.FC = () => {
               <>
                 <label className="label">
                   Cep:
-                  <Field type="number" name="cep" className="input" />
+                  <Field
+                    type="text"
+                    name="cep"
+                    className="input"
+                    placeholder="00000-000"
+                  />
                   <ErrorMessage name="cep" component="p" className="error" />
                 </label>
                 <label className="label">
@@ -151,7 +164,7 @@ const CadastroEndereco: React.FC = () => {
                   Complemento:
                   <Field type="text" name="complemento" className="input" />
                 </label>
-                {values.planeta === 'Terra' && ( // Renderizando o campo "País" apenas para Terra
+                {values.planeta === 'Terra' && (
                   <label className="label">
                     País:
                     <Field type="text" name="pais" className="input" />

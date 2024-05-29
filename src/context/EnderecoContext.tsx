@@ -8,7 +8,7 @@ interface Endereco {
   complemento: string;
   cep: string;
   planeta: string;
-  pais?: string; // Adicionando o campo "país" no tipo Endereco
+  pais?: string; 
 }
 
 interface EnderecoContextData {
