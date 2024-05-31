@@ -1,20 +1,22 @@
-body {
+/* App.css */
+body, html, #root {
+  height: 100%;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
-#root {
-  min-height: 100vh;
+.wrapper {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
+.content {
+  flex: 1;
+}
+
+/* Footer.css */
 footer {
   text-align: center;
   padding: 1rem;
   background-color: #f1f1f1;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
 }

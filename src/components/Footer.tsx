@@ -4,7 +4,7 @@ import './Footer.css';
 const Footer: React.FC = () => {
   return (
     <footer>
-      <p>Desafio Beyond the Bytes desenvolvido por Gabriel Mello - 2024.</p>
+      <p>© Desafio Beyond the Bytes desenvolvido por Gabriel Mello - 2024.</p>
     </footer>
   );
 };

@@ -1,31 +1,23 @@
+// main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-// css
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './App';
+import { EnderecoProvider } from './context/EnderecoContext';
 import './index.css';
 
-// react-router
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// Components
-import Navbar from './components/Navbar';
-// pages
-import CadastroEndereco from './routes/CadastroEndereco';
-import EdicaoEndereco from './routes/EdicaoEndereço';
-import Home from './routes/Home';
-// context
-import { EnderecoProvider } from './context/EnderecoContext';
+const rootElement = document.getElementById('root');
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <EnderecoProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cadastro" element={<CadastroEndereco />} />
-          <Route path="/editarCadastro/:id" element={<EdicaoEndereco />} />
-        </Routes>
-      </Router>
-    </EnderecoProvider>
-  </React.StrictMode>,
-);
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <EnderecoProvider>
+        <Router>
+          <App />
+        </Router>
+      </EnderecoProvider>
+    </React.StrictMode>,
+  );
+} else {
+  console.error('Elemento root não encontrado');
+}

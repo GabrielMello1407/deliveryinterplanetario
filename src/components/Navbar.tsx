@@ -10,11 +10,7 @@ const Menu: React.FC = () => {
       </NavLink>
       <ul className="navbar-menu">
         <li className="navbar-item">
-          <NavLink
-            to="/cadastro"
-            className="navbar-link"
-            activeClassName="active"
-          >
+          <NavLink to="/cadastro" className="navbar-link">
             Cadastrar
           </NavLink>
         </li>
