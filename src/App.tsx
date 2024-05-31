@@ -1,7 +1,13 @@
-import Header from './routes/Home';
+import Footer from './components/Footer';
+import Home from './routes/Home';
 
 function App() {
-  return <Header />;
+  return (
+    <>
+      <Home />
+      <Footer />
+    </>
+  );
 }
 
 export default App;

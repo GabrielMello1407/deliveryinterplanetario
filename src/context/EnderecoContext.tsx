@@ -8,7 +8,7 @@ interface Endereco {
   complemento: string;
   cep: string;
   planeta: string;
-  pais?: string; 
+  pais?: string;
 }
 
 interface EnderecoContextData {
@@ -39,7 +39,9 @@ export const EnderecoProvider: React.FC<{ children: ReactNode }> = ({
     complemento: '',
     cep: '',
     planeta: 'Terra',
-    pais: '', // Inicializando o campo "país" como vazio
+    pais: '',
+    cidade: '',
+    lote: '',
   });
 
   return (

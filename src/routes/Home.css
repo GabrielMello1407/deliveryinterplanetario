@@ -1,39 +1,57 @@
-/* src/routes/Home.css */
+.home-container h1{
+  display: flex;
+  font-size: 45px;
+  max-width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: center;
 
+}
 .home-container {
   padding: 20px;
 }
-
 .endereco-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 2fr));
   gap: 20px;
 }
 
 .endereco-item {
-  border: 1px solid #ccc;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
   background-color: #f9f9f9;
   color: black;
+  font-size: 20px;
 }
 
 /* Estilos para cada item do endereço */
+.span-item{
+  font-weight: normal;
+}
 .endereco-item p {
+  font-weight: bold;
   margin: 5px 0;
 }
+.button-container{
+  display: flex;
+  gap: 1rem;
+}
 .button {
-  padding: 5px 10px;
+  margin-top: 10px;
+  padding: 10px 10px;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 15px;
   border: none;
-  background-color: #007bff;
-  color: #fff;
+  background-color: orange;
+  font-weight: bold;
+  color: #000;
   cursor: pointer;
-  align-self: center;
   margin-right: 5px;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: red;
+  color: #fff;
 }

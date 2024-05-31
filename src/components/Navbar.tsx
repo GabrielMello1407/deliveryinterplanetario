@@ -6,7 +6,7 @@ const Menu: React.FC = () => {
   return (
     <nav className="navbar">
       <NavLink to="/" className="navbar-logo">
-        <h2>DeliveryPlanet</h2>
+        <h2 className="gradient">DeliveryPlanet</h2>
       </NavLink>
       <ul className="navbar-menu">
         <li className="navbar-item">
